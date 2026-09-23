@@ -37,3 +37,16 @@ def test_procesar_pedido_descuento_20():
     carrito = [{'id_producto': 'P01', 'cantidad': 1}]
     total = tienda.procesar_pedido(carrito, cupon_descuento="SENA2026")
     assert total == 80000, f"se esperaba 80000, pero el sistema cobró {total}"
+
+
+
+def test_limpiar_inventario():
+    tienda = TiendaOnline()
+    tienda.agregar_producto("P01", "Teclado", 100000, 5)
+    tienda.agregar_producto("P02", "Mause", 10000, 8)
+    carrito = [{'id_producto': 'P01', 'cantidad': 5}]
+    tienda.procesar_pedido(carrito)
+    tienda.limpiar_agotados()
+
+    assert "P01" not in tienda.inventario,f"no se eliminaron los productos con menos 0 productos en su stock ${tienda.inventario}"
+
